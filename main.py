@@ -1,43 +1,58 @@
-# main.py
 import logging
 import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes.api_v1 import api_router
 
-# Log startup
-logging.basicConfig(level=logging.INFO)
-logging.info("🚀 FastAPI backend starting...")
+# Enhanced logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
-# Get environment variables from DigitalOcean App Platform
-DATABASE_URL = os.getenv("DATABASE_URL","postgresql://default:pass@localhost/dbname")
-SECRET_KEY = os.getenv("SECRET_KEY","defaultsecret")
+logger.info("🚀 FastAPI backend starting...")
 
-# Optional: log or validate
+# Get environment variables
+DATABASE_URL = os.getenv("DATABASE_URL")
+SECRET_KEY = os.getenv("SECRET_KEY")
+PORT = int(os.getenv("PORT", 8080))
+
+# Validate environment variables
 if not DATABASE_URL:
-    logging.error("DATABASE_URL is not set!")
-if not SECRET_KEY:
-    logging.error("SECRET_KEY is not set!")
+    logger.error("DATABASE_URL is not set!")
+    raise ValueError("DATABASE_URL environment variable is required")
 
-app = FastAPI()
+if not SECRET_KEY:
+    logger.error("SECRET_KEY is not set!")
+    raise ValueError("SECRET_KEY environment variable is required")
+
+logger.info(f"Using PORT: {PORT}")
+logger.info("Environment variables loaded successfully")
+
+app = FastAPI(title="PetrobainGlobal API", version="1.0.0")
 
 # CORS settings
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://www.petrobrainglobal.com"],  # Replace with actual frontend domain
+    allow_origins=["https://www.petrobrainglobal.com"],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE"],
     allow_headers=["Authorization", "Content-Type"],
 )
 
-# Include all routes
+# Include routes
 app.include_router(api_router, prefix="/api")
 
 @app.get("/")
 def read_root():
-    return {"status": "ok"}
+    return {"status": "ok", "message": "PetrobainGlobal API is running"}
 
 @app.get("/health")
 def health_check():
-    return {"status": "healthy"}
+    return {"status": "healthy", "timestamp": "2025-08-06"}
 
+@app.on_event("startup")
+async def startup_event():
+    logger.info("Application startup complete")
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    logger.info("Application shutting down")
