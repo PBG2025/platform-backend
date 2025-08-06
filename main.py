@@ -1,4 +1,8 @@
 # main.py
+import logging
+logging.basicConfig(level=logging.INFO)
+logging.info("🚀 FastAPI backend starting...")
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes.api_v1 import api_router
