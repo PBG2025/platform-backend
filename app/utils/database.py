@@ -3,6 +3,10 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+#for test:
+
+print(">>> DEBUG SECRET_KEY:", os.getenv("SECRET_KEY"))
+
 # Load from .env in local dev; safe to run in production too (ignored if no file)
 load_dotenv()
 
