@@ -1,7 +1,6 @@
-# crud.py
-
+# app/services/crud.py
 from sqlalchemy.orm import Session
-from models import PDFUpload
+from app.models.upload import PDFUpload
 
 # Create a new PDF upload record
 def create_pdf_upload(db: Session, filename: str, url: str):
@@ -18,5 +17,3 @@ def get_pdf_by_id(db: Session, pdf_id: int):
 # Get all PDFs
 def get_all_pdfs(db: Session):
     return db.query(PDFUpload).all()
-
-

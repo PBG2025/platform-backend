@@ -1,10 +1,6 @@
-from sqlalchemy import Column, Integer, String
-from database import Base
+# app/models/base.py
+from app.database import Base
 
-class PDFUpload(Base):
-    __tablename__ = "pdf_uploads"
-
-    id = Column(Integer, primary_key=True, index=True)
-    filename = Column(String, index=True)
-    url = Column(String)
-
+# Re-export Base so other models can import it from here
+# This keeps the import structure clean
+__all__ = ["Base"]
