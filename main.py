@@ -10,8 +10,8 @@ logging.basicConfig(level=logging.INFO)
 logging.info("🚀 FastAPI backend starting...")
 
 # Get environment variables from DigitalOcean App Platform
-DATABASE_URL = os.getenv("DATABASE_URL")
-SECRET_KEY = os.getenv("SECRET_KEY")
+DATABASE_URL = os.getenv("DATABASE_URL","postgresql://default:pass@localhost/dbname")
+SECRET_KEY = os.getenv("SECRET_KEY","defaultsecret")
 
 # Optional: log or validate
 if not DATABASE_URL:
