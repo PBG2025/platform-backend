@@ -3,9 +3,18 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logging.info("🚀 FastAPI backend starting...")
 
+# Load environment variables from .env file
+from dotenv import load_dotenv
+load_dotenv()
+
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes.api_v1 import api_router
+
+# Access environment variables
+DATABASE_URL = os.getenv("DATABASE_URL")
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 app = FastAPI()
 
@@ -20,6 +29,11 @@ app.add_middleware(
 
 # Include all routes
 app.include_router(api_router, prefix="/api")
+
+
+@app.get("/")
+def read_root():
+    return {"status": "ok"}
 
 @app.get("/health")
 def health_check():
